@@ -1,0 +1,50 @@
+%{
+#include <stdio.h>
+#include <stdlib.h>
+
+int result = 0;
+char operator = 0;
+%}
+
+%%
+
+[0-9]+ {
+    int num = atoi(yytext);
+    if (operator == 0) {
+        result = num; // For the first number
+    } else {
+        switch (operator) {
+            case '+': result += num; break;
+            case '-': result -= num; break;
+            case '*': result *= num; break;
+            case '/': result /= num; break;
+            default: printf("Unknown operator: %c\n", operator);
+        }
+    }
+    operator = 0; // Reset operator after each number
+}
+
+"+"|"-"|"*"|"/" {
+    operator = yytext[0];
+}
+
+[ \t\n] {
+    // Ignore whitespace (spaces, tabs, newlines)
+}
+
+. {
+    printf("Invalid character: %s\n", yytext);
+}
+
+%%
+
+int main() {
+    printf("Enter a mathematical expression:\n");
+    yylex();
+    printf("Result: %d\n", result);
+    return 0;
+}
+
+int yywrap() {
+    return 1;
+}
