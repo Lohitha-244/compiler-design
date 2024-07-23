@@ -1,0 +1,33 @@
+%{
+#include <stdio.h>
+%}
+
+%%
+
+[a-zA-Z]+ {
+    printf("Word: %s\n", yytext);
+}
+
+"=="|"!="|"<="|">="|"<"|">" {
+    printf("Relational Operator: %s\n", yytext);
+}
+
+[ \t\n] {
+    // Ignore whitespace (spaces, tabs, newlines)
+}
+
+. {
+    // Ignore other characters
+}
+
+%%
+
+int main() {
+    printf("Enter text to recognize words and relational operators (Ctrl+D to end input):\n");
+    yylex();
+    return 0;
+}
+
+int yywrap() {
+    return 1;
+}
